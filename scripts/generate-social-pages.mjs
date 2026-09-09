@@ -1,7 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import { pageMeta, site } from "../src/data/portfolioData.js";
 
 const dist = path.resolve("dist");
 const siteUrl = "https://daniel.kavangi.co.ke";
@@ -13,16 +12,17 @@ const pages = [
     metaTitle: "Daniel Mwendwa Kavangi | Data & Risk Analyst",
     eyebrow: "ACTUARIAL SCIENCE · DATA & RISK",
     title: ["Daniel Mwendwa", "Kavangi"],
-    description: "Data & risk analysis for insurance, banking and fintech decisions.",
+    description:
+      "Daniel Mwendwa Kavangi is an actuarial science candidate and data & risk analyst in Nairobi, using Python, R and Excel for insurance, banking and fintech decisions.",
     accent: "#C4A36A",
   },
   {
     path: "/about",
     slug: "about",
-    metaTitle: "About Daniel Mwendwa Kavangi | Data & Risk Analyst",
+    metaTitle: "About | Daniel Mwendwa Kavangi",
     eyebrow: "ABOUT",
     title: ["Actuarial science.", "Practical analysis."],
-    description: "Python, R and Excel for data, risk and financial decisions.",
+    description: "Actuarial science, data and risk analysis for insurance, banking and fintech decisions.",
     accent: "#B9D5CD",
   },
   {
@@ -46,10 +46,10 @@ const pages = [
   {
     path: "/education",
     slug: "education",
-    metaTitle: "Education & Credentials | Daniel Mwendwa Kavangi",
+    metaTitle: "Education | Daniel Mwendwa Kavangi",
     eyebrow: "EDUCATION & CREDENTIALS",
     title: ["Actuarial science.", "Built on evidence."],
-    description: "Quantitative training, professional certificates and a research-led foundation.",
+    description: "Actuarial science education, quantitative training and selected professional certificates.",
     accent: "#C4A36A",
   },
   {
@@ -105,9 +105,8 @@ function socialCard(page) {
 }
 
 function replaceMeta(html, page) {
-  const pageConfig = pageMeta[page.path] || pageMeta["/"];
-  const title = pageConfig.shareTitle || pageConfig.title || site.title;
-  const description = pageConfig.shareDescription || pageConfig.description || site.description;
+  const title = page.metaTitle;
+  const description = page.description;
   const url = `${siteUrl}${page.path}`;
   const image = `${siteUrl}/social-${page.slug}.png`;
   let next = html;
