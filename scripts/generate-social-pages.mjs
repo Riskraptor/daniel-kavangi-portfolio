@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
+import { pageMeta, site } from "../src/data/portfolioData.js";
 
 const dist = path.resolve("dist");
 const siteUrl = "https://daniel.kavangi.co.ke";
@@ -104,8 +105,9 @@ function socialCard(page) {
 }
 
 function replaceMeta(html, page) {
-  const title = page.metaTitle;
-  const description = page.description;
+  const pageConfig = pageMeta[page.path] || pageMeta["/"];
+  const title = pageConfig.shareTitle || pageConfig.title || site.title;
+  const description = pageConfig.shareDescription || pageConfig.description || site.description;
   const url = `${siteUrl}${page.path}`;
   const image = `${siteUrl}/social-${page.slug}.png`;
   let next = html;
