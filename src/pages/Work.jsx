@@ -40,7 +40,7 @@ export default function Work() {
     <PageWrapper>
       <section className="border-b border-rule">
         <div className="wrap py-14 sm:py-16 lg:py-20">
-          <p className="eyebrow">{researchProject.label}</p>
+          <p className="eyebrow">{researchProject.label} · Featured project</p>
           <h1 className="mt-3 max-w-4xl font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl lg:text-6xl">
             {researchProject.title}
           </h1>
@@ -146,7 +146,7 @@ export default function Work() {
               <Metric
                 value={`${selected.requiredRate}%`}
                 label="research threshold"
-                detail={`${selected.targetProbability}% simulated adequacy probability at this occupation-calibrated rate.`}
+                detail={`Minimum rate identified for the model's 75% adequacy-probability target.`}
               />
             </div>
             <div className="mt-8">
