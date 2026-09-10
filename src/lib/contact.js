@@ -15,6 +15,8 @@ function isValidEmail(value) {
 
 function clean(value, max) {
   return String(value || "")
+    // Strip control characters so headers and mail bodies cannot be forged.
+    // eslint-disable-next-line no-control-regex
     .replace(/[\u0000-\u001F\u007F]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
@@ -92,6 +94,7 @@ export async function sendMessage(payload) {
         email: safe.email,
         message: safe.message,
         company: safe.company,
+        captcha: safe.captcha,
       }),
     });
 

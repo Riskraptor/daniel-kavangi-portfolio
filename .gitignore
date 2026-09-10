@@ -25,3 +25,5 @@ cv/*.fls
 cv/*.fdb_latexmk
 cv/*.xdv
 cv/*.synctex.gz
+
+.claude/launch.json
