@@ -71,8 +71,8 @@ export function validateMessage({ name, email, message, topic, other }) {
   return errors;
 }
 
-/** Field order used to decide which invalid control receives focus. */
-export const fieldOrder = ["name", "email", "topic", "other", "message", "captcha"];
+/** Visual field order, used to decide which invalid control receives focus. */
+const fieldOrder = ["name", "email", "topic", "other", "message", "captcha"];
 
 export function firstInvalidField(errors) {
   return fieldOrder.find((field) => errors[field]) || null;
