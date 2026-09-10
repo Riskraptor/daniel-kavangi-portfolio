@@ -1,8 +1,8 @@
 import { useState } from "react";
 import PageWrapper from "../components/PageWrapper";
 import Tabs from "../components/Tabs";
-import { IconExternal, IconMail, IconPhone } from "../components/Icons";
-import { certifications, education, referees } from "../data/portfolioData";
+import { IconExternal } from "../components/Icons";
+import { certifications, education, refereeNote, referees } from "../data/portfolioData";
 
 function StudiesPanel() {
   const degree = education[0];
@@ -13,6 +13,7 @@ function StudiesPanel() {
       <h3 className="mt-3 font-serif text-3xl font-medium tracking-tight text-ink">{degree.degree}</h3>
       <p className="mt-3 text-lg text-ink-soft">{degree.institution}</p>
       <p className="mt-1 text-sm text-ink-muted">{degree.period}</p>
+      {degree.status ? <p className="mt-3 text-sm font-medium text-accent">{degree.status}</p> : null}
       {degree.href && (
         <a
           href={degree.href}
@@ -30,29 +31,18 @@ function StudiesPanel() {
 
 function RefereesPanel() {
   return (
-    <ul className="grid gap-4 sm:grid-cols-2">
-      {referees.map((person) => (
-        <li key={person.id} className="panel p-5">
-          <p className="eyebrow">{person.organisation}</p>
-          <h3 className="mt-2 font-serif text-xl font-medium tracking-tight text-ink">{person.name}</h3>
-          <p className="mt-1 text-sm text-ink-soft">{person.title}</p>
-          <div className="mt-5 space-y-2 text-sm">
-            <a href={`mailto:${person.email}`} className="flex items-center gap-2 text-ink-soft transition-colors hover:text-ink">
-              <IconMail className="h-4 w-4 text-accent" />
-              <span className="inline-flex items-center gap-1.5">
-                Write an email
-                <IconExternal className="h-3 w-3 text-accent" />
-              </span>
-            </a>
-            <p className="pl-6 text-ink-muted">{person.email}</p>
-            <a href={`tel:${person.phone}`} className="flex items-center gap-2 text-ink-soft transition-colors hover:text-ink">
-              <IconPhone className="h-4 w-4 text-accent" />
-              Call {person.phoneDisplay}
-            </a>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div>
+      <ul className="grid gap-4 sm:grid-cols-2">
+        {referees.map((person) => (
+          <li key={person.id} className="panel p-5">
+            <p className="eyebrow">{person.organisation}</p>
+            <h3 className="mt-2 font-serif text-xl font-medium tracking-tight text-ink">{person.name}</h3>
+            <p className="mt-1 text-sm text-ink-soft">{person.title}</p>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink-muted">{refereeNote}</p>
+    </div>
   );
 }
 

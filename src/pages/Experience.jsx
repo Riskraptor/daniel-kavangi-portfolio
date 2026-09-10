@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import PageWrapper from "../components/PageWrapper";
 import { IconArrow } from "../components/Icons";
-import { experience, personalInfo } from "../data/portfolioData";
+import { experience } from "../data/portfolioData";
 
 export default function Experience() {
   return (
@@ -44,7 +44,6 @@ export default function Experience() {
             <IconArrow className="h-4 w-4" />
           </Link>
         </div>
-        <p className="sr-only">{personalInfo.name}</p>
       </div>
     </PageWrapper>
   );
