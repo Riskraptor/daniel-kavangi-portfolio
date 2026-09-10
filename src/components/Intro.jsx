@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { personalInfo } from "../data/portfolioData";
 
 const STORAGE_KEY = "portfolio-intro-seen";
-const HOLD_MS = 1200;
-const LEAVE_MS = 550;
+// Short enough that the site feels immediate on a slow connection, long
+// enough to register as a deliberate opening rather than a flash.
+const HOLD_MS = 600;
+const LEAVE_MS = 420;
 
 /**
  * Decided during the first render so the component never has to correct itself

@@ -97,7 +97,10 @@ function usePageMeta() {
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // html has scroll-behavior: smooth for in-page anchors, which a plain
+    // scrollTo inherits. On a route change that animated the whole way back up
+    // a long page while the next page was already rendering. Jump instead.
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
   return null;
 }
