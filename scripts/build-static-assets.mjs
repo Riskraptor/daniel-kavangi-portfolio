@@ -13,10 +13,11 @@
  * Icons are generated rather than committed, so the mark lives in exactly one
  * place and no binary needs re-exporting when it changes.
  */
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
+import { preloadHint } from "../src/data/media.js";
 import { routes, siteUrl, socialImagePath } from "../src/data/routes.js";
 
 const dist = path.resolve("dist");
@@ -163,14 +164,38 @@ ${entries}
 `;
 }
 
+/**
+ * Both font families are used on every page, and both are self-hosted with
+ * hashed filenames, so the browser only discovers them after parsing the CSS.
+ * Preloading the two latin faces removes that second round trip.
+ */
+async function fontPreloads() {
+  const assets = await readdir(path.join(dist, "assets"));
+  return assets
+    .filter((file) => file.endsWith(".woff2") && !file.includes("latin-ext"))
+    .map(
+      (file) =>
+        `    <link rel="preload" as="font" type="font/woff2" href="/assets/${file}" crossorigin />`
+    )
+    .join("\n");
+}
+
+function imagePreload(route) {
+  if (!route.preloadImage) return "";
+  const hint = preloadHint(route.preloadImage.name, route.preloadImage.sizes);
+  return `    <link rel="preload" as="image" type="${hint.type}" href="${hint.href}" imagesrcset="${xml(hint.imagesrcset)}" imagesizes="${xml(hint.imagesizes)}" />`;
+}
+
 const html = await readFile(path.join(dist, "index.html"), "utf8");
+const fonts = await fontPreloads();
 
 for (const route of routes) {
   await sharp(Buffer.from(socialCard(route)))
     .png({ compressionLevel: 9 })
     .toFile(path.join(dist, socialImagePath(route)));
 
-  const output = withMetadata(html, route);
+  const hints = [fonts, imagePreload(route)].filter(Boolean).join("\n");
+  const output = withMetadata(html, route).replace("  </head>", `${hints}\n  </head>`);
 
   if (route.path === "/") {
     await writeFile(path.join(dist, "index.html"), output);

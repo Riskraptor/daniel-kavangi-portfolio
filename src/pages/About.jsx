@@ -81,10 +81,12 @@ export default function About() {
             <div className="lg:sticky lg:top-24">
               <div className="border border-ink/15 bg-paper-2 p-2">
                 <SmartImage
-                  src={personalInfo.photo}
+                  name={personalInfo.photo}
                   alt={`Portrait of ${personalInfo.name}`}
                   width={900}
                   height={1200}
+                  priority
+                  sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, calc(100vw - 2.5rem)"
                   className="aspect-[4/5] w-full object-cover object-[center_22%]"
                 />
               </div>

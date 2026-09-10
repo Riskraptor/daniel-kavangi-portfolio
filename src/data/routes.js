@@ -28,6 +28,10 @@ export const routes = [
       accent: "#C4A36A",
     },
     sitemap: { priority: "1.0", changefreq: "monthly" },
+    preloadImage: {
+      name: "portrait-professional",
+      sizes: "(min-width: 1024px) 400px, (min-width: 640px) 384px, calc(100vw - 2.5rem)",
+    },
   },
   {
     slug: "about",
@@ -45,6 +49,10 @@ export const routes = [
       accent: "#B9D5CD",
     },
     sitemap: { priority: "0.8", changefreq: "monthly" },
+    preloadImage: {
+      name: "portrait-professional",
+      sizes: "(min-width: 1024px) 320px, (min-width: 640px) 45vw, calc(100vw - 2.5rem)",
+    },
   },
   {
     slug: "work",
