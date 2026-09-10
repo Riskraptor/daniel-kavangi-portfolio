@@ -43,11 +43,27 @@ function SkillsPanel() {
         <article key={key} className={`border-t border-rule pt-5 ${key === "professional" ? "sm:col-span-2" : ""}`}>
           <h3 className="text-sm font-semibold tracking-wide text-ink uppercase">{skillMeta[key].label}</h3>
           <p className="mt-2 text-sm text-ink-muted">{skillMeta[key].blurb}</p>
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-4 space-y-3">
             {items.map((skill) => (
-              <li key={skill} className="flex gap-2 text-[1.02rem] text-ink">
+              <li key={skill.name} className="flex gap-2 text-[1.02rem] text-ink">
                 <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-bronze" aria-hidden="true" />
-                {skill}
+                <span>
+                  {skill.name}
+                  {skill.evidence ? (
+                    <span className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                      {skill.evidence.map((item) => (
+                        <Link
+                          key={item.to + item.label}
+                          to={item.to}
+                          className="inline-flex items-center gap-1 text-[0.82rem] font-semibold text-accent hover:underline"
+                        >
+                          <IconArrow className="h-3 w-3" />
+                          {item.label}
+                        </Link>
+                      ))}
+                    </span>
+                  ) : null}
+                </span>
               </li>
             ))}
           </ul>

@@ -52,10 +52,12 @@
 
   /* Decorative bronze: dots, rules, accent borders. No contrast requirement. */
   --color-bronze: #8a7048;
-  /* Bronze that carries text. The decorative tone only reaches 4.11:1 on paper,
-     which fails WCAG AA for the 11.5px eyebrow labels it was being used for. */
-  --color-bronze-on-light: #7b613d;
-  --color-bronze-on-dark: #c49c64;
+  /* Bronze that carries text, named by the surface it sits on rather than by
+     its own lightness, so both stay correct when the theme inverts. The
+     decorative tone only reaches 4.11:1 on paper, which fails WCAG AA for the
+     11.5px eyebrow labels it was being used for. */
+  --color-bronze-on-paper: #7b613d;
+  --color-bronze-on-ink: #c49c64;
 
   /* Borders of controls a person has to find and click. --color-rule is 1.39:1
      against paper, far under the 3:1 that WCAG 1.4.11 asks of a UI component,
@@ -170,7 +172,7 @@
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-bronze-on-light);
+    color: var(--color-bronze-on-paper);
   }
 
   .rule {
@@ -943,3 +945,89 @@
   font-weight: 700;
   color: var(--color-ink);
 }
+
+/*
+ * Dark theme.
+ *
+ * Only the token values change; every rule above reads them through var(), so
+ * nothing else needs a dark variant. Tokens are named for the surface they sit
+ * on, not for their own lightness, which is why --color-bronze-on-ink becomes
+ * the darker bronze here: in this theme the ink-coloured band is the light one.
+ *
+ * Applied either by the system preference or by an explicit choice recorded on
+ * <html data-theme>. The explicit choice always wins in both directions.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: #12181d;
+    --color-paper-2: #1d252c;
+    --color-surface: #181f26;
+    --color-ink: #e8e3d8;
+    --color-ink-soft: #c2beb4;
+    --color-ink-muted: #9aa39f;
+    --color-rule: #2b343c;
+    --color-rule-strong: #3d4852;
+    --color-accent: #7cc0d1;
+    --color-bronze: #a08050;
+    --color-bronze-on-paper: #d0aa74;
+    --color-bronze-on-ink: #7b613d;
+    --color-field: #66736c;
+    --color-danger: #f0938a;
+
+    --chart-series-1: #6fb3c4;
+    --chart-series-2: #d0aa74;
+    --chart-series-3: #d68fa8;
+    --chart-surface: #181f26;
+    --chart-grid: #2b343c;
+    --chart-axis: #66736c;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-paper: #12181d;
+  --color-paper-2: #1d252c;
+  --color-surface: #181f26;
+  --color-ink: #e8e3d8;
+  --color-ink-soft: #c2beb4;
+  --color-ink-muted: #9aa39f;
+  --color-rule: #2b343c;
+  --color-rule-strong: #3d4852;
+  --color-accent: #7cc0d1;
+  --color-bronze: #a08050;
+  --color-bronze-on-paper: #d0aa74;
+  --color-bronze-on-ink: #7b613d;
+  --color-field: #66736c;
+  --color-danger: #f0938a;
+
+  --chart-series-1: #6fb3c4;
+  --chart-series-2: #d0aa74;
+  --chart-series-3: #d68fa8;
+  --chart-surface: #181f26;
+  --chart-grid: #2b343c;
+  --chart-axis: #66736c;
+}
+
+/* The focus ring must clear its own background in either theme. */
+:focus-visible {
+  outline-color: var(--color-accent);
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-field);
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-ink);
+  color: var(--color-accent);
+}
+
