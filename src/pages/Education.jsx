@@ -13,7 +13,10 @@ function StudiesPanel() {
       <h3 className="mt-3 font-serif text-3xl font-medium tracking-tight text-ink">{degree.degree}</h3>
       <p className="mt-3 text-lg text-ink-soft">{degree.institution}</p>
       <p className="mt-1 text-sm text-ink-muted">{degree.period}</p>
-      {degree.status ? <p className="mt-3 text-sm font-medium text-accent">{degree.status}</p> : null}
+      {degree.classification ? (
+        <p className="mt-3 text-ink">{degree.classification}</p>
+      ) : null}
+      {degree.status ? <p className="mt-1 text-sm font-medium text-accent">{degree.status}</p> : null}
       {degree.href && (
         <a
           href={degree.href}
