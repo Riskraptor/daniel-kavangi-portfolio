@@ -99,6 +99,19 @@ Colour tokens live in `@theme` in `src/index.css`; the dark theme redefines the 
 
 `tests/theme-tokens.test.mjs` asserts WCAG contrast for both themes, so a palette change that drops a pair below the threshold fails CI.
 
+### Files other systems depend on
+
+Some files in `public/` are referenced from **outside** this repository, so
+grepping the source will not show them as used:
+
+| File | Used by |
+| --- | --- |
+| `public/cv-headshot.jpg` | The CV hosted on rxresu.me points its photo at `https://daniel.kavangi.co.ke/cv-headshot.jpg` |
+| `public/Daniel-Mwendwa-Kavangi-Resume.pdf` | The Download CV button, and any link already sent to an employer |
+
+`tests/public-assets.test.mjs` fails if one goes missing. Add an entry there
+before adding another externally-referenced file.
+
 ### Images
 
 `public/media` is **generated, not committed**. Widths and formats come from `src/data/media.js`, read by both the generator and `SmartImage`, so a width added there is produced and offered in the same change.
