@@ -368,6 +368,9 @@
     pointer-events: none;
     transform-origin: left;
     background: linear-gradient(90deg, var(--color-bronze), var(--color-ink));
+    /* Invisible at rest so the bar can never linger as a permanent hairline,
+       whatever the animation does — including under reduced motion. */
+    opacity: 0;
     animation: route-progress 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -608,6 +611,12 @@
   }
 
   .intro {
+    display: none;
+  }
+
+  /* A progress flash has no meaning without motion, and a zero-length animation
+     leaves its painted state up to the engine. Drop the element outright. */
+  .route-progress {
     display: none;
   }
 

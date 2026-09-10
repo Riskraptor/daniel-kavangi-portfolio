@@ -16,7 +16,11 @@ import { SEND_FAIL, sendMessage, topics, validateMessage } from "../lib/contact"
 import { personalInfo, referees, socials } from "../data/portfolioData";
 
 const HCaptcha = lazy(() => import("@hcaptcha/react-hcaptcha"));
-const HCAPTCHA_SITEKEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+
+// Falls back to the shared Web3Forms site key. Set VITE_HCAPTCHA_SITEKEY (and
+// the matching HCAPTCHA_SECRET on the server) to verify tokens in our own API.
+const HCAPTCHA_SITEKEY =
+  import.meta.env.VITE_HCAPTCHA_SITEKEY || "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
 
 const channelIcons = {
   email: IconMail,

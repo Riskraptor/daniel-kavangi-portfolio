@@ -1,67 +1,67 @@
 import { useEffect, useRef, useState } from "react";
 import { personalInfo } from "../data/portfolioData";
 
-function prefersReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
+const STORAGE_KEY = "portfolio-intro-seen";
+const HOLD_MS = 1200;
+const LEAVE_MS = 550;
 
-function hasSeenIntro() {
+/**
+ * Decided during the first render so the component never has to correct itself
+ * in an effect, which would cost an extra render before anything paints.
+ */
+function shouldSkipIntro() {
   try {
-    return window.sessionStorage.getItem("portfolio-intro-seen") === "true";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+    return window.sessionStorage.getItem(STORAGE_KEY) === "true";
   } catch {
+    // The introductory motion stays optional if storage is unavailable.
     return false;
   }
 }
 
 function rememberIntro() {
   try {
-    window.sessionStorage.setItem("portfolio-intro-seen", "true");
+    window.sessionStorage.setItem(STORAGE_KEY, "true");
   } catch {
-    // The introductory motion remains optional if storage is unavailable.
+    // Ignored: a missed flag only means the intro plays again next session.
   }
 }
 
 export default function Intro({ onDone }) {
-  const [phase, setPhase] = useState("pending");
-  const finished = useRef(false);
-  const leaving = useRef(false);
+  const [phase, setPhase] = useState(() => (shouldSkipIntro() ? "done" : "play"));
   const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
 
   useEffect(() => {
-    function complete() {
-      if (finished.current) return;
-      finished.current = true;
-      document.body.style.overflow = "";
-      setPhase("done");
-    }
+    onDoneRef.current = onDone;
+  }, [onDone]);
 
-    function leave() {
-      if (finished.current || leaving.current) return;
-      leaving.current = true;
-      rememberIntro();
-      setPhase("leave");
+  useEffect(() => {
+    if (phase !== "play") {
       onDoneRef.current?.();
-      window.setTimeout(complete, 550);
-    }
-
-    if (prefersReducedMotion() || hasSeenIntro()) {
-      onDoneRef.current?.();
-      complete();
       return undefined;
     }
 
-    setPhase("play");
+    rememberIntro();
     document.body.style.overflow = "hidden";
-    const autoLeave = window.setTimeout(leave, 1200);
+
+    const toLeave = window.setTimeout(() => {
+      setPhase("leave");
+      onDoneRef.current?.();
+    }, HOLD_MS);
 
     return () => {
-      window.clearTimeout(autoLeave);
+      window.clearTimeout(toLeave);
       document.body.style.overflow = "";
     };
-  }, []);
+  }, [phase]);
 
-  if (phase === "pending" || phase === "done") return null;
+  useEffect(() => {
+    if (phase !== "leave") return undefined;
+    const toDone = window.setTimeout(() => setPhase("done"), LEAVE_MS);
+    return () => window.clearTimeout(toDone);
+  }, [phase]);
+
+  if (phase === "done") return null;
 
   return (
     <div className={`intro${phase === "leave" ? " is-leave" : ""}`} role="status" aria-label="Loading">
