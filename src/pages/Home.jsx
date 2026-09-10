@@ -40,10 +40,12 @@ export default function Home() {
           <figure className="hero-frame mx-auto w-full max-w-sm lg:max-w-none">
             <div className="overflow-hidden border border-ink/15 bg-paper-2 p-2">
               <SmartImage
-                src={personalInfo.photo}
+                name={personalInfo.photo}
                 alt={`Portrait of ${personalInfo.name}`}
                 width={900}
                 height={1200}
+                priority
+                sizes="(min-width: 1024px) 400px, (min-width: 640px) 384px, calc(100vw - 2.5rem)"
                 className="aspect-[3/4] w-full object-cover object-[center_22%] transition duration-500 hover:scale-[1.03]"
               />
             </div>

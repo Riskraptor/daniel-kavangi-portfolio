@@ -37,7 +37,7 @@ export default tseslint.config(
 
   // Serverless functions, build scripts and tests run on Node.
   {
-    files: ["api/**/*.js", "scripts/**/*.mjs", "tests/**/*.mjs", "*.config.{js,ts}"],
+    files: ["api/**/*.js", "scripts/**/*.mjs", "tests/**/*.mjs", "*.config.js"],
     extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 2022,
@@ -46,6 +46,17 @@ export default tseslint.config(
     },
     rules: {
       "no-console": "off",
+    },
+  },
+
+  // Build config authored in TypeScript needs the TS parser.
+  {
+    files: ["*.config.ts"],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.node,
+      sourceType: "module",
     },
   }
 );

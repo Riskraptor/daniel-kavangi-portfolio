@@ -1,4 +1,3 @@
-import portrait from "../assets/images/portrait-professional.jpg";
 import { notFoundRoute, routeByPath, routes, siteUrl, socialImagePath } from "./routes";
 
 export { siteUrl };
@@ -28,7 +27,9 @@ export const personalInfo = {
   whatsapp: "@riskraptor",
   whatsappUser: "riskraptor",
   whatsappUrl: "https://wa.me/254715417220",
-  photo: portrait,
+  // Base name of the generated responsive set in public/media.
+  photo: "portrait-professional",
+  photoAspect: { width: 1600, height: 1600 },
   resumeUrl: "/Daniel-Mwendwa-Kavangi-Resume.pdf",
   resumeFileName: "Daniel-Mwendwa-Kavangi-Resume.pdf",
   availability: "Open to actuarial, insurance, banking, data analysis and fintech roles",
