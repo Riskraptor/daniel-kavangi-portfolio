@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PageWrapper from "../components/PageWrapper";
 import { IconArrow } from "../components/Icons";
 import ReplacementRateChart from "../components/ReplacementRateChart";
-import { featuredProject, projectedReplacementRate } from "../data/portfolioData";
+import { featuredProject, otherProjects, projectedReplacementRate } from "../data/portfolioData";
 
 const money = new Intl.NumberFormat("en-KE", {
   style: "currency",
@@ -206,6 +206,31 @@ export default function Work() {
           </div>
         </div>
       </section>
+
+      {/* Renders nothing until a second project exists, so adding one to the
+          projects array is all it takes to see it here. */}
+      {otherProjects.length > 0 ? (
+        <section className="border-t border-rule">
+          <div className="wrap py-16 sm:py-20">
+            <p className="eyebrow">More work</p>
+            <ul className="mt-8 divide-y divide-rule border-y border-rule">
+              {otherProjects.map((project) => (
+                <li key={project.id} className="grid gap-3 py-8 sm:grid-cols-[11rem_1fr] sm:gap-10">
+                  <p className="text-sm text-ink-muted">{project.label}</p>
+                  <div>
+                    <h3 className="font-serif text-2xl font-medium tracking-tight text-ink">
+                      {project.shortTitle || project.title}
+                    </h3>
+                    <p className="mt-3 max-w-2xl text-[1.02rem] leading-relaxed text-ink-soft">
+                      {project.summary}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
     </PageWrapper>
   );
 }

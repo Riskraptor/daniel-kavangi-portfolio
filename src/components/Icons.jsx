@@ -17,14 +17,6 @@ export function IconMail({ className = "" }) {
   );
 }
 
-export function IconPhone({ className = "" }) {
-  return (
-    <svg className={cn("h-5 w-5", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3c0 1-1 2-2 2C9.5 19.5 4.5 14.5 4.5 5.5c0-1 1-2 2-2Z" />
-    </svg>
-  );
-}
-
 export function IconWhatsApp({ className = "" }) {
   return (
     <svg className={cn("h-5 w-5", className)} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -54,44 +46,6 @@ export function IconClose({ className = "" }) {
   return (
     <svg className={cn("h-6 w-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
       <path d="M6 6l12 12M18 6 6 18" />
-    </svg>
-  );
-}
-
-export function IconCap({ className = "" }) {
-  return (
-    <svg className={cn("h-5 w-5", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="m3 9 9-5 9 5-9 5-9-5Z" />
-      <path d="M7 11.5v4.2c0 .4 2.2 2.3 5 2.3s5-1.9 5-2.3v-4.2" />
-      <path d="M21 9v6" />
-    </svg>
-  );
-}
-
-export function IconBriefcase({ className = "" }) {
-  return (
-    <svg className={cn("h-5 w-5", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="3" y="7" width="18" height="13" rx="2" />
-      <path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7" />
-      <path d="M3 12h18" />
-    </svg>
-  );
-}
-
-export function IconAward({ className = "" }) {
-  return (
-    <svg className={cn("h-5 w-5", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="9" r="5.5" />
-      <path d="m8.5 13.5-1.5 7 5-2.5 5 2.5-1.5-7" />
-    </svg>
-  );
-}
-
-export function IconLang({ className = "" }) {
-  return (
-    <svg className={cn("h-5 w-5", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 12h18M12 3c2.5 3 3.8 6 3.8 9s-1.3 6-3.8 9c-2.5-3-3.8-6-3.8-9S9.5 6 12 3Z" />
     </svg>
   );
 }

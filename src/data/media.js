@@ -6,7 +6,7 @@
  * Keep this file free of imports, like routes.js.
  */
 
-export const MEDIA_BASE = "/media";
+const MEDIA_BASE = "/media";
 
 /** The portrait never renders wider than ~400 CSS px, so 1200 covers 3x. */
 export const IMAGE_WIDTHS = [320, 480, 640, 960, 1200];
@@ -18,7 +18,7 @@ export const MODERN_FORMATS = ["avif", "webp"];
 export const FALLBACK_FORMAT = "jpg";
 
 /** Width used for the plain src attribute when srcset is unsupported. */
-export const FALLBACK_WIDTH = 640;
+const FALLBACK_WIDTH = 640;
 
 function srcSet(name, extension) {
   return IMAGE_WIDTHS.map((width) => `${MEDIA_BASE}/${name}-${width}.${extension} ${width}w`).join(", ");
