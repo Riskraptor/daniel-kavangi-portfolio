@@ -131,6 +131,7 @@ export const education = [
     credential: "BSc",
     institution: "Chuka University",
     period: "2022 to 2026",
+    classification: "Second Class Upper Division",
     status: "Completed, awaiting graduation",
     href: "https://www.chuka.ac.ke/",
   },

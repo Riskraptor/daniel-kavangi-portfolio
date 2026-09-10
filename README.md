@@ -109,6 +109,21 @@ grepping the source will not show them as used:
 | `public/cv-headshot.jpg` | The CV hosted on rxresu.me points its photo at `https://daniel.kavangi.co.ke/cv-headshot.jpg` |
 | `public/Daniel-Mwendwa-Kavangi-Resume.pdf` | The Download CV button, and any link already sent to an employer |
 
+### The CV comes in two versions
+
+The source lives on [rxresu.me](https://rxresu.me), as two resumes:
+
+| Resume | Referees | Used for |
+| --- | --- | --- |
+| `daniel-mwendwa-kavangi` | Names, roles, **emails and phone numbers** | Sending directly to an employer. Never committed here. |
+| `daniel-mwendwa-kavangi-public` | Names and roles only, plus "available on request" | Exported to `public/Daniel-Mwendwa-Kavangi-Resume.pdf` and served from the site |
+
+The split exists because the site download is public: publishing the referees' 
+personal contact details there would undo the same decision made on the
+Education and Contact pages. When the CV changes, edit the full version, apply
+the same change to the public one, and re-export **the public one** into
+`public/`.
+
 `tests/public-assets.test.mjs` fails if one goes missing. Add an entry there
 before adding another externally-referenced file.
 
