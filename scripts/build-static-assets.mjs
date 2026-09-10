@@ -13,6 +13,7 @@
  * Icons are generated rather than committed, so the mark lives in exactly one
  * place and no binary needs re-exporting when it changes.
  */
+import { createHash } from "node:crypto";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
@@ -209,6 +210,21 @@ for (const route of routes) {
 
 await writeFile(path.join(dist, "sitemap.xml"), sitemap(new Date().toISOString().slice(0, 10)));
 
+/*
+ * Stamp the service worker with a build id derived from the emitted asset
+ * names. A content change produces new hashed filenames, which produces a new
+ * cache name, which retires the old cache on activation. A rebuild that changes
+ * nothing keeps the same id and leaves visitors' caches alone.
+ */
+const assetNames = (await readdir(path.join(dist, "assets"))).sort().join("|");
+const buildId = createHash("sha256").update(assetNames).digest("hex").slice(0, 12);
+const swPath = path.join(dist, "sw.js");
+const sw = await readFile(swPath, "utf8");
+if (!sw.includes("__BUILD_ID__")) {
+  throw new Error("build-static-assets: sw.js has no __BUILD_ID__ placeholder to stamp");
+}
+await writeFile(swPath, sw.replace("__BUILD_ID__", buildId));
+
 
 const ICON_INK = "#14202B";
 const ICON_PAPER = "#F4F0E8";
@@ -265,5 +281,5 @@ await writeFile(path.join(dist, "manifest.webmanifest"), `${JSON.stringify(manif
 `);
 
 console.log(
-  `build-static-assets: ${routes.length} pages, ${routes.length} cards, ${icons.length} icons, sitemap and manifest written`
+  `build-static-assets: ${routes.length} pages, ${routes.length} cards, ${icons.length} icons, sitemap, manifest, sw ${buildId}`
 );

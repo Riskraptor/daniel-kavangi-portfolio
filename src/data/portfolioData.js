@@ -200,24 +200,49 @@ export const experience = [
   },
 ];
 
+/**
+ * Where a skill was actually used. Every entry points at something already on
+ * the site, so a claim can be checked in one click rather than taken on trust.
+ */
+const evidence = {
+  research: { label: "Retirement adequacy research", to: "/work" },
+  excelerate: { label: "Excelerate internship", to: "/experience" },
+  machakos: { label: "Machakos County Assembly", to: "/experience" },
+  degree: { label: "BSc Actuarial Science", to: "/education" },
+  certificates: { label: "Certificates", to: "/education" },
+};
+
 export const skills = {
   analysis: [
-    "Data analysis",
-    "Statistical analysis",
-    "Quantitative analysis",
-    "Predictive modelling",
-    "Financial mathematics",
-    "Quantitative risk analysis",
-    "Stochastic modelling",
-    "Data visualisation",
+    { name: "Data analysis", evidence: [evidence.excelerate, evidence.research] },
+    { name: "Statistical analysis", evidence: [evidence.research] },
+    { name: "Quantitative analysis", evidence: [evidence.research] },
+    { name: "Predictive modelling", evidence: [evidence.research] },
+    { name: "Financial mathematics", evidence: [evidence.degree] },
+    { name: "Quantitative risk analysis", evidence: [evidence.research] },
+    { name: "Stochastic modelling", evidence: [evidence.research] },
+    { name: "Data visualisation", evidence: [evidence.excelerate] },
   ],
-  tools: ["Python", "R", "Microsoft Excel", "VBA"],
-  domains: ["Actuarial analysis", "Insurance", "Banking and finance", "Fintech", "Data analysis"],
+  tools: [
+    { name: "Python", evidence: [evidence.excelerate] },
+    { name: "R", evidence: [evidence.excelerate, evidence.certificates] },
+    { name: "Microsoft Excel", evidence: [evidence.excelerate, evidence.machakos] },
+    { name: "VBA", evidence: [evidence.machakos] },
+  ],
+  // Sectors I am aiming at rather than skills already exercised, so no evidence
+  // is claimed for them.
+  domains: [
+    { name: "Actuarial analysis" },
+    { name: "Insurance" },
+    { name: "Banking and finance" },
+    { name: "Fintech" },
+    { name: "Data analysis" },
+  ],
   professional: [
-    "Analytical thinking and problem-solving",
-    "Time management and organisation",
-    "Professional communication",
-    "Team collaboration",
+    { name: "Analytical thinking and problem-solving" },
+    { name: "Time management and organisation" },
+    { name: "Professional communication" },
+    { name: "Team collaboration" },
   ],
 };
 

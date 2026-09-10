@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { navLinks, personalInfo } from "../data/portfolioData";
 import { IconClose, IconMenu } from "./Icons";
 import ResumeButton from "./ResumeButton";
+import ThemeToggle from "./ThemeToggle";
 import SocialLinks from "./SocialLinks";
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -105,10 +106,12 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          <ResumeButton variant="secondary" size="sm" className="ml-3" />
+          <ThemeToggle className="ml-2" />
+          <ResumeButton variant="secondary" size="sm" className="ml-2" />
         </nav>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
           <button
             ref={toggleRef}
             type="button"
