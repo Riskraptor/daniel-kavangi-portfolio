@@ -68,7 +68,7 @@ export default function Work() {
           <ol className="space-y-5">
             {researchProject.methods.map((method, index) => (
               <li key={method} className="grid grid-cols-[2rem_1fr] gap-3 border-t border-rule pt-4">
-                <span className="font-serif text-xl text-bronze">0{index + 1}</span>
+                <span className="font-serif text-xl text-bronze-on-light">0{index + 1}</span>
                 <p className="text-[1.05rem] leading-relaxed text-ink-soft">{method}</p>
               </li>
             ))}
@@ -78,14 +78,14 @@ export default function Work() {
 
       <section className="border-b border-rule bg-ink text-paper">
         <div className="wrap py-16 sm:py-20">
-          <p className="eyebrow text-bronze">What the model found</p>
+          <p className="eyebrow text-bronze-on-dark">What the model found</p>
           <h2 className="mt-3 max-w-4xl font-serif text-3xl font-medium tracking-tight sm:text-4xl">A standard 10% contribution was not enough.</h2>
           <p className="mt-5 max-w-3xl text-lg leading-relaxed text-paper/75">{researchProject.finding}</p>
           <div className="mt-10 grid gap-7 md:grid-cols-3">
             {researchProject.strata.map((item) => (
               <article key={item.id} className="border-t border-paper/25 pt-5">
                 <p className="text-sm font-semibold text-paper">{item.name}</p>
-                <p className="mt-5 font-serif text-5xl text-bronze">{item.replacementRate}%</p>
+                <p className="mt-5 font-serif text-5xl text-bronze-on-dark">{item.replacementRate}%</p>
                 <p className="mt-1 text-sm text-paper/65">mean replacement rate at 10%</p>
                 <div className="mt-6 h-px w-full bg-paper/20" />
                 <p className="mt-4 text-sm text-paper/70">{item.zeroDays}% of diary days had no surplus available for saving.</p>

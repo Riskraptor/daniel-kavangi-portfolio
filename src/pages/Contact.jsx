@@ -6,12 +6,13 @@ import {
   IconExternal,
   IconGitHub,
   IconLinkedIn,
-  IconMail,
+  IconAlert,
+  IconMail,
   IconPin,
   IconSend,
   IconWhatsApp,
 } from "../components/Icons";
-import { SEND_FAIL, sendMessage, topics, validateMessage } from "../lib/contact";
+import { firstInvalidField, SEND_FAIL, sendMessage, topics, validateMessage } from "../lib/contact";
 import { personalInfo, refereeNote, referees, socials } from "../data/portfolioData";
 
 const HCaptcha = lazy(() => import("@hcaptcha/react-hcaptcha"));
@@ -43,45 +44,94 @@ const channels = [
   },
 ];
 
+/**
+ * Wires a control to its label and, when present, to its error message, so a
+ * screen reader announces the problem with the field instead of leaving the
+ * person to guess which of six controls is wrong.
+ */
+function Field({ id, label, error, children }) {
+  return (
+    <div>
+      <label htmlFor={id} className="eyebrow block">
+        {label}
+      </label>
+      {children}
+      {error ? (
+        <p className="field-error" id={`${id}-error`}>
+          <IconAlert className="mt-0.5 h-4 w-4 shrink-0" />
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function invalidProps(id, error) {
+  return error ? { "aria-invalid": true, "aria-describedby": `${id}-error` } : {};
+}
+
+const EMPTY_FORM = { name: "", email: "", topic: "", other: "", message: "", company: "" };
+
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", topic: "", other: "", message: "", company: "" });
+  const [form, setForm] = useState(EMPTY_FORM);
   const [status, setStatus] = useState("idle");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [copied, setCopied] = useState(false);
   const [captcha, setCaptcha] = useState("");
   const captchaRef = useRef(null);
   const sending = status === "loading";
+  const errorCount = Object.keys(errors).filter((key) => key !== "form").length;
+  const errorSummary = errorCount
+    ? `${errorCount} ${errorCount === 1 ? "field needs" : "fields need"} your attention.`
+    : "";
 
   function resetCaptcha() {
     setCaptcha("");
     captchaRef.current?.resetCaptcha?.();
   }
 
+  /** Clears one field's error as soon as the person starts correcting it. */
+  function clearError(field) {
+    setErrors((prev) => {
+      if (!prev[field] && !prev.form) return prev;
+      const next = { ...prev };
+      delete next[field];
+      delete next.form;
+      return next;
+    });
+  }
+
   function onChange(event) {
-    setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-    if (status === "error") {
-      setStatus("idle");
-      setError("");
-    }
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    clearError(name);
+    if (status === "error") setStatus("idle");
+  }
+
+  function focusField(field) {
+    const node =
+      field === "captcha"
+        ? document.getElementById("verification")
+        : document.getElementById(field);
+    node?.scrollIntoView({ block: "center" });
+    if (field !== "captcha") node?.focus({ preventScroll: true });
   }
 
   async function onSubmit(event) {
     event.preventDefault();
-    const problem = validateMessage(form);
-    if (problem) {
+
+    const found = validateMessage(form);
+    if (!captcha) found.captcha = "Confirm you are not a robot, then send.";
+
+    if (Object.keys(found).length > 0) {
       setStatus("error");
-      setError(problem);
-      return;
-    }
-    if (!captcha) {
-      setStatus("error");
-      setError("Confirm you are not a robot, then send.");
-      document.getElementById("verification")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      setErrors(found);
+      focusField(firstInvalidField(found));
       return;
     }
 
     setStatus("loading");
-    setError("");
+    setErrors({});
     const started = Date.now();
     const result = await sendMessage({
       name: form.name,
@@ -97,7 +147,7 @@ export default function Contact() {
 
     if (!result.ok) {
       setStatus("error");
-      setError(SEND_FAIL);
+      setErrors({ form: SEND_FAIL });
       resetCaptcha();
       return;
     }
@@ -236,8 +286,8 @@ export default function Contact() {
                   className="text-link mt-8 text-sm"
                   onClick={() => {
                     setStatus("idle");
-                    setError("");
-                    setForm({ name: "", email: "", topic: "", other: "", message: "", company: "" });
+                    setErrors({});
+                    setForm(EMPTY_FORM);
                   }}
                 >
                   Write another message
@@ -261,10 +311,8 @@ export default function Contact() {
                     onChange={onChange}
                   />
                 </div>
-                <div>
-                  <label htmlFor="name" className="eyebrow block">
-                    Name
-                  </label>
+
+                <Field id="name" label="Name" error={errors.name}>
                   <input
                     id="name"
                     name="name"
@@ -274,14 +322,13 @@ export default function Contact() {
                     onChange={onChange}
                     required
                     disabled={sending}
-                    className="mt-2 w-full border border-rule bg-paper px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink-muted/70 focus-visible:border-accent disabled:opacity-70"
+                    className="field mt-2"
                     placeholder="Your name"
+                    {...invalidProps("name", errors.name)}
                   />
-                </div>
-                <div>
-                  <label htmlFor="email" className="eyebrow block">
-                    Email
-                  </label>
+                </Field>
+
+                <Field id="email" label="Email" error={errors.email}>
                   <input
                     id="email"
                     name="email"
@@ -293,14 +340,13 @@ export default function Contact() {
                     onChange={onChange}
                     required
                     disabled={sending}
-                    className="mt-2 w-full border border-rule bg-paper px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink-muted/70 focus-visible:border-accent disabled:opacity-70"
+                    className="field mt-2"
                     placeholder="you@domain.com"
+                    {...invalidProps("email", errors.email)}
                   />
-                </div>
-                <div>
-                  <label htmlFor="topic" className="eyebrow block">
-                    Reason
-                  </label>
+                </Field>
+
+                <Field id="topic" label="Reason" error={errors.topic}>
                   <select
                     id="topic"
                     name="topic"
@@ -308,7 +354,8 @@ export default function Contact() {
                     onChange={onChange}
                     required
                     disabled={sending}
-                    className={`field-select mt-2 w-full border border-rule bg-paper px-4 py-3 text-sm outline-none transition focus-visible:border-accent disabled:opacity-70 ${form.topic ? "text-ink" : "is-empty text-ink-muted/70"}`}
+                    className={`field field-select mt-2 ${form.topic ? "" : "text-ink-muted"}`}
+                    {...invalidProps("topic", errors.topic)}
                   >
                     <option value="" disabled hidden>
                       Select one
@@ -319,12 +366,10 @@ export default function Contact() {
                       </option>
                     ))}
                   </select>
-                </div>
+                </Field>
+
                 {form.topic === "other" ? (
-                  <div>
-                    <label htmlFor="other" className="eyebrow block">
-                      Subject
-                    </label>
+                  <Field id="other" label="Subject" error={errors.other}>
                     <input
                       id="other"
                       name="other"
@@ -333,15 +378,14 @@ export default function Contact() {
                       onChange={onChange}
                       required
                       disabled={sending}
-                      className="mt-2 w-full border border-rule bg-paper px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink-muted/70 focus-visible:border-accent disabled:opacity-70"
+                      className="field mt-2"
                       placeholder="Short subject"
+                      {...invalidProps("other", errors.other)}
                     />
-                  </div>
+                  </Field>
                 ) : null}
-                <div>
-                  <label htmlFor="message" className="eyebrow block">
-                    Message
-                  </label>
+
+                <Field id="message" label="Message" error={errors.message}>
                   <textarea
                     id="message"
                     name="message"
@@ -351,10 +395,12 @@ export default function Contact() {
                     onChange={onChange}
                     required
                     disabled={sending}
-                    className="mt-2 w-full resize-y border border-rule bg-paper px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink-muted/70 focus-visible:border-accent disabled:opacity-70"
+                    className="field mt-2 resize-y"
                     placeholder="Role, team, or question"
+                    {...invalidProps("message", errors.message)}
                   />
-                </div>
+                </Field>
+
                 <div id="verification" className="captcha-wrap">
                   <p className="eyebrow">Verification</p>
                   <p className="mt-1 mb-3 text-sm text-ink-soft">Confirm you are not a robot.</p>
@@ -365,24 +411,32 @@ export default function Contact() {
                       reCaptchaCompat={false}
                       onVerify={(token) => {
                         setCaptcha(token);
-                        if (status === "error") {
-                          setStatus("idle");
-                          setError("");
-                        }
+                        clearError("captcha");
+                        if (status === "error") setStatus("idle");
                       }}
                       onExpire={resetCaptcha}
                       onError={resetCaptcha}
                     />
                   </Suspense>
+                  {errors.captcha ? (
+                    <p className="field-error" id="captcha-error">
+                      <IconAlert className="mt-0.5 h-4 w-4 shrink-0" />
+                      {errors.captcha}
+                    </p>
+                  ) : null}
                 </div>
-                {status === "error" && (
-                  <p className="text-sm text-accent" role="alert">
-                    {error}
+
+                {errors.form ? (
+                  <p className="field-error" role="alert">
+                    <IconAlert className="mt-0.5 h-4 w-4 shrink-0" />
+                    {errors.form}
                   </p>
-                )}
+                ) : null}
+
                 <p className="sr-only" role="status" aria-live="polite">
-                  {sending ? "Sending your message" : ""}
+                  {sending ? "Sending your message" : errorSummary}
                 </p>
+
                 <button type="submit" className="btn btn-primary btn-send" disabled={sending}>
                   {sending ? (
                     <>

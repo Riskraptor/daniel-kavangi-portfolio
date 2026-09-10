@@ -24,6 +24,10 @@ export default function Tabs({ tabs, value, onChange, label }) {
             id={`tab-${tab.id}`}
             aria-controls={`panel-${tab.id}`}
             aria-selected={value === tab.id}
+            /* Roving tabindex: one stop for the whole tablist, then arrow keys
+               move between tabs. Every tab being tabbable made a keyboard user
+               step through all of them to reach the panel. */
+            tabIndex={value === tab.id ? 0 : -1}
             className="tab"
             onClick={() => onChange(tab.id)}
             onKeyDown={(event) => moveFocus(event, index)}
@@ -39,7 +43,8 @@ export default function Tabs({ tabs, value, onChange, label }) {
             role="tabpanel"
             id={`panel-${tab.id}`}
             aria-labelledby={`tab-${tab.id}`}
-            className="fade-in pt-8"
+            tabIndex={0}
+            className="fade-in pt-8 outline-none"
           >
             {tab.content}
           </div>

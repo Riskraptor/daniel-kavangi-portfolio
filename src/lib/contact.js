@@ -37,17 +37,45 @@ export function buildSubject(topic, other, name) {
   return `${label} from ${who}`.slice(0, 120);
 }
 
+/**
+ * Returns a field -> message map, empty when the form is ready to send.
+ * Per-field messages let the form mark the specific control that needs
+ * attention instead of showing one sentence covering four possible causes.
+ */
 export function validateMessage({ name, email, message, topic, other }) {
-  const nextName = clean(name, 100);
+  const errors = {};
+
+  if (!clean(name, 100)) {
+    errors.name = "Add your name.";
+  }
+
   const nextEmail = clean(email, 254);
-  const nextMessage = clean(message, 4000);
-  if (!nextName || !isValidEmail(nextEmail) || !nextMessage) {
-    return "Please add your name, a valid email, and a message.";
+  if (!nextEmail) {
+    errors.email = "Add your email address.";
+  } else if (!isValidEmail(nextEmail)) {
+    errors.email = "That email address does not look right.";
   }
-  if (!topicLabel(topic, other)) {
-    return "Please choose why you are writing.";
+
+  if (!topic) {
+    errors.topic = "Choose why you are writing.";
+  } else if (!topics.some((item) => item.id === topic)) {
+    errors.topic = "Choose one of the listed reasons.";
+  } else if (topic === "other" && !clean(other, 80)) {
+    errors.other = "Add a short subject.";
   }
-  return null;
+
+  if (!clean(message, 4000)) {
+    errors.message = "Add a message.";
+  }
+
+  return errors;
+}
+
+/** Field order used to decide which invalid control receives focus. */
+export const fieldOrder = ["name", "email", "topic", "other", "message", "captcha"];
+
+export function firstInvalidField(errors) {
+  return fieldOrder.find((field) => errors[field]) || null;
 }
 
 async function deliverViaWeb3Forms({ name, email, message, topic, subject, accessKey, captcha }) {
