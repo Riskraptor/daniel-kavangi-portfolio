@@ -1,13 +1,15 @@
 import portrait from "../assets/images/portrait-professional.jpg";
+import { notFoundRoute, routeByPath, routes, siteUrl, socialImagePath } from "./routes";
 
-export const siteUrl = "https://daniel.kavangi.co.ke";
+export { siteUrl };
+
+const home = routeByPath("/");
 
 export const site = {
-  title: "Daniel Mwendwa Kavangi | Data & Risk Analyst",
+  title: home.title,
   shortTitle: "Daniel Mwendwa Kavangi",
-  shareTitle: "Meet Daniel Mwendwa Kavangi",
-  description:
-    "Daniel Mwendwa Kavangi is an actuarial science candidate and data & risk analyst in Nairobi, using Python, R and Excel for insurance, banking and fintech decisions.",
+  shareTitle: home.shareTitle,
+  description: home.description,
 };
 
 export const personalInfo = {
@@ -32,7 +34,7 @@ export const personalInfo = {
   availability: "Open to actuarial, insurance, banking, data analysis and fintech roles",
   summary:
     "I use Python, R and Excel to analyse data, quantify risk and turn financial information into decisions. I am looking for analyst roles in actuarial, insurance, banking, data and fintech teams.",
-  bio: "I am Daniel Mwendwa Kavangi, based in Nairobi. I am an actuarial science candidate at Chuka University, working with data, finance and technology: cleaning datasets, building models, tracking variance and turning results into reports people can use.",
+  bio: "I am Daniel Mwendwa Kavangi, based in Nairobi. I am an actuarial science graduate of Chuka University, working with data, finance and technology: cleaning datasets, building models, tracking variance and turning results into reports people can use.",
   seeking:
     "I want to join a team in actuarial analysis, insurance, banking, data analysis or fintech, and contribute from day one.",
   university: "Chuka University",
@@ -81,87 +83,45 @@ export const languages = [
   { name: "Kiswahili", level: "Fluent" },
 ];
 
-export const navLinks = [
-  { path: "/", label: "Home" },
-  { path: "/about", label: "About" },
-  { path: "/work", label: "Selected work" },
-  { path: "/experience", label: "Experience" },
-  { path: "/education", label: "Education" },
-  { path: "/contact", label: "Contact" },
-];
+export const navLinks = routes.map(({ path, label }) => ({ path, label }));
 
-export const pageMeta = {
-  "/": {
-    title: site.title,
-    description: site.description,
-    shareTitle: "Daniel Mwendwa Kavangi | Data & Risk Analyst",
-    shareDescription: site.description,
-    socialImage: "social-home.png",
-  },
-  "/about": {
-    title: "About | Daniel Mwendwa Kavangi",
-    description:
-      "Actuarial science, data and risk analysis by Daniel Mwendwa Kavangi. Python, R and Excel for insurance, banking and fintech.",
-    shareTitle: "About Daniel Mwendwa Kavangi | Data & Risk Analyst",
-    shareDescription: "Actuarial science, data and risk analysis for insurance, banking and fintech decisions.",
-    socialImage: "social-about.png",
-  },
-  "/experience": {
-    title: "Experience | Daniel Mwendwa Kavangi",
-    description:
-      "Data Visualization Intern at Excelerate and Budget Assistant at Machakos County Assembly.",
-    shareTitle: "Experience | Daniel Mwendwa Kavangi",
-    shareDescription: "Data visualisation, budget analysis and financial reporting experience using Python, R, Excel and VBA.",
-    socialImage: "social-experience.png",
-  },
-  "/work": {
-    title: "Selected work | Daniel Mwendwa Kavangi",
-    description:
-      "Team-led actuarial research: stochastic modelling of retirement adequacy for informal-sector workers in Chuka Municipality.",
-    shareTitle: "Selected Work | Retirement Adequacy Research",
-    shareDescription: "A team-led actuarial study using 3,000 financial-diary entries and 10,000 Monte Carlo iterations.",
-    socialImage: "social-work.png",
-  },
-  "/education": {
-    title: "Education | Daniel Mwendwa Kavangi",
-    description: "BSc Actuarial Science, Chuka University, professional certificates and referees.",
-    shareTitle: "Education & Credentials | Daniel Mwendwa Kavangi",
-    shareDescription: "Actuarial science education, quantitative training and selected professional certificates.",
-    socialImage: "social-education.png",
-  },
-  "/contact": {
-    title: "Contact | Daniel Mwendwa Kavangi",
-    description: "Contact Daniel Mwendwa Kavangi about actuarial, insurance, banking, data or fintech roles.",
-    shareTitle: "Contact Daniel Mwendwa Kavangi",
-    shareDescription: "Get in touch about actuarial, insurance, banking, data-analysis and fintech opportunities.",
-    socialImage: "social-contact.png",
-  },
-  "/404": {
-    title: "Page not found | Daniel Mwendwa Kavangi",
-    description: "This page is not on Daniel Mwendwa Kavangi's site.",
-  },
-};
+export const pageMeta = Object.fromEntries(
+  [...routes, notFoundRoute].map((route) => [
+    route.path,
+    {
+      title: route.title,
+      description: route.description,
+      shareTitle: route.shareTitle,
+      shareDescription: route.shareDescription,
+      socialImage: socialImagePath(route),
+      indexable: route.sitemap !== null,
+    },
+  ])
+);
 
+/**
+ * Referees are named for credibility, but their email addresses and personal
+ * phone numbers are deliberately not published. They belong to other people,
+ * a public page hands them to every scraper that visits, and consent to act as
+ * a referee is not consent to be listed publicly. They go out on request.
+ */
 export const referees = [
   {
     id: "misati",
     name: "Edwin Misati",
     title: "Lecturer, Actuarial Science",
     organisation: "Chuka University",
-    email: "emisati@chuka.ac.ke",
-    phone: "+254724945510",
-    phoneDisplay: "+254 724 945 510",
   },
   {
     id: "magero",
     name: "Elizabeth Magero",
     title: "Lecturer and Section Head, Actuarial Science",
     organisation: "Chuka University",
-    email: "emagero@chuka.ac.ke",
-    phone: "+254726872725",
-    phoneDisplay: "+254 726 872 725",
   },
 ];
+
+export const refereeNote =
+  "Full referee contact details are shared on request. Write to me and I will pass them on.";
 
 export const education = [
   {
@@ -170,6 +130,7 @@ export const education = [
     credential: "BSc",
     institution: "Chuka University",
     period: "2022 to 2026",
+    status: "Completed, awaiting graduation",
     href: "https://www.chuka.ac.ke/",
   },
 ];
@@ -216,10 +177,10 @@ export const experience = [
       "Built interactive charts and dashboards in Python, R and Excel, cleaned datasets, and presented findings through structured visual reports.",
     highlights: [
       "Created interactive charts and dashboards using Python, Excel and R.",
-      "Cleaned and analyzed datasets to support visual reporting.",
-      "Presented insights through structured data visualizations.",
+      "Cleaned and analysed datasets to support visual reporting.",
+      "Presented insights through structured data visualisations.",
     ],
-    tools: ["Python", "R", "Excel", "Data visualization"],
+    tools: ["Python", "R", "Excel", "Data visualisation"],
   },
   {
     id: "machakos",
@@ -253,7 +214,7 @@ export const skills = {
   domains: ["Actuarial analysis", "Insurance", "Banking and finance", "Fintech", "Data analysis"],
   professional: [
     "Analytical thinking and problem-solving",
-    "Time management and organization",
+    "Time management and organisation",
     "Professional communication",
     "Team collaboration",
   ],

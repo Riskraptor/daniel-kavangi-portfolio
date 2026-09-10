@@ -6,14 +6,13 @@ import {
   IconExternal,
   IconGitHub,
   IconLinkedIn,
-  IconMail,
-  IconPhone,
+  IconMail,
   IconPin,
   IconSend,
   IconWhatsApp,
 } from "../components/Icons";
 import { SEND_FAIL, sendMessage, topics, validateMessage } from "../lib/contact";
-import { personalInfo, referees, socials } from "../data/portfolioData";
+import { personalInfo, refereeNote, referees, socials } from "../data/portfolioData";
 
 const HCaptcha = lazy(() => import("@hcaptcha/react-hcaptcha"));
 
@@ -213,21 +212,10 @@ export default function Contact() {
                     <p className="font-medium text-ink">{person.name}</p>
                     <p className="mt-1 text-sm text-ink-soft">{person.title}</p>
                     <p className="text-sm text-ink-muted">{person.organisation}</p>
-                    <a
-                      href={`mailto:${person.email}`}
-                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-ink"
-                    >
-                      Write an email
-                      <IconExternal className="h-3.5 w-3.5 text-accent" />
-                    </a>
-                    <p className="mt-0.5 text-sm text-ink-muted">{person.email}</p>
-                    <a href={`tel:${person.phone}`} className="mt-2 flex items-center gap-2 text-sm text-ink-soft hover:text-ink">
-                      <IconPhone className="h-4 w-4 text-accent" />
-                      Call {person.phoneDisplay}
-                    </a>
                   </li>
                 ))}
               </ul>
+              <p className="mt-3 text-sm leading-relaxed text-ink-muted">{refereeNote}</p>
             </div>
           </div>
 
