@@ -270,59 +270,87 @@ export const fitAreas = [
   },
 ];
 
-export const researchProject = {
-  label: "Team-led actuarial research · 2026",
-  title: "Can flexible micro-pensions deliver retirement adequacy?",
-  shortTitle: "Retirement adequacy under volatile income",
-  summary:
-    "I led a six-member undergraduate research team that used financial diaries and actuarial simulation to examine retirement adequacy for informal-sector workers in Chuka Municipality.",
-  context:
-    "For workers with volatile daily income, a fixed monthly contribution can be unrealistic. We tested what happens when retirement saving follows real surplus income instead.",
-  scope: [
-    { value: "100", label: "participants" },
-    { value: "3,000", label: "participant-day entries" },
-    { value: "10,000", label: "Monte Carlo iterations" },
-    { value: "30 years", label: "projection horizon" },
-  ],
-  methods: [
-    "30-day financial diaries across boda-boda operators, market vendors and technical artisans",
-    "Descriptive analysis of surplus income and zero-surplus days",
-    "Goodness-of-fit testing with a bootstrap contingency approach",
-    "Discrete-time Monte Carlo projection of retirement funds and replacement rates",
-  ],
-  strata: [
-    {
-      id: "boda",
-      name: "Boda-boda operators",
-      meanSurplus: 250.74,
-      positiveDaySurplus: 384.59,
-      zeroDays: 34.8,
-      replacementRate: 14.12,
-      requiredRate: 29,
-    },
-    {
-      id: "vendor",
-      name: "Market vendors",
-      meanSurplus: 298.23,
-      positiveDaySurplus: 522.57,
-      zeroDays: 42.9,
-      replacementRate: 17.71,
-      requiredRate: 23,
-    },
-    {
-      id: "artisan",
-      name: "Technical artisans",
-      meanSurplus: 324.93,
-      positiveDaySurplus: 731.1,
-      zeroDays: 55.6,
-      replacementRate: 20.77,
-      requiredRate: 20,
-    },
-  ],
-  finding:
-    "At a 10% contribution rate, every group had a 0% simulated probability of reaching the 40% replacement-rate benchmark. The model identified minimum contribution rates of 29%, 23% and 20% for a 75% adequacy-probability target, showing why one-size-fits-all pension design fails.",
-  recommendation:
-    "Design mobile, income-aware micro-pensions with occupation-calibrated contributions, zero-surplus protection and matching mechanisms rather than fixed monthly deductions.",
-  note:
-    "Figures are aggregate outputs from the attached research report and financial-diary analysis. No participant-level diary data, personal identifiers or research-team registration details are published here.",
-};
+/**
+ * Projects, newest first. The featured one drives the Selected work page; any
+ * others appear beneath it automatically, so adding a second project is a data
+ * change rather than a page rewrite.
+ */
+export const projects = [
+  {
+    id: 'retirement-adequacy',
+    featured: true,
+    label: "Team-led actuarial research · 2026",
+    title: "Can flexible micro-pensions deliver retirement adequacy?",
+    shortTitle: "Retirement adequacy under volatile income",
+    summary:
+      "I led a six-member undergraduate research team that used financial diaries and actuarial simulation to examine retirement adequacy for informal-sector workers in Chuka Municipality.",
+    context:
+      "For workers with volatile daily income, a fixed monthly contribution can be unrealistic. We tested what happens when retirement saving follows real surplus income instead.",
+    scope: [
+      { value: "100", label: "participants" },
+      { value: "3,000", label: "participant-day entries" },
+      { value: "10,000", label: "Monte Carlo iterations" },
+      { value: "30 years", label: "projection horizon" },
+    ],
+    methods: [
+      "30-day financial diaries across boda-boda operators, market vendors and technical artisans",
+      "Descriptive analysis of surplus income and zero-surplus days",
+      "Goodness-of-fit testing with a bootstrap contingency approach",
+      "Discrete-time Monte Carlo projection of retirement funds and replacement rates",
+    ],
+    // The adequacy target the simulation was scored against.
+    benchmark: { value: 40, label: "40% replacement-rate benchmark" },
+    adequacyTarget: 75,
+    strata: [
+      {
+        id: "boda",
+        name: "Boda-boda operators",
+        meanSurplus: 250.74,
+        positiveDaySurplus: 384.59,
+        zeroDays: 34.8,
+        replacementRate: 14.12,
+        requiredRate: 29,
+      },
+      {
+        id: "vendor",
+        name: "Market vendors",
+        meanSurplus: 298.23,
+        positiveDaySurplus: 522.57,
+        zeroDays: 42.9,
+        replacementRate: 17.71,
+        requiredRate: 23,
+      },
+      {
+        id: "artisan",
+        name: "Technical artisans",
+        meanSurplus: 324.93,
+        positiveDaySurplus: 731.1,
+        zeroDays: 55.6,
+        replacementRate: 20.77,
+        requiredRate: 20,
+      },
+    ],
+    finding:
+      "At a 10% contribution rate, every group had a 0% simulated probability of reaching the 40% replacement-rate benchmark. The model identified minimum contribution rates of 29%, 23% and 20% for a 75% adequacy-probability target, showing why one-size-fits-all pension design fails.",
+    recommendation:
+      "Design mobile, income-aware micro-pensions with occupation-calibrated contributions, zero-surplus protection and matching mechanisms rather than fixed monthly deductions.",
+    note:
+      "Figures are aggregate outputs from the attached research report and financial-diary analysis. No participant-level diary data, personal identifiers or research-team registration details are published here.",
+  },
+];
+
+/**
+ * Replacement rate implied at a given contribution rate, anchored on the
+ * published figure at 10%. In a simple accumulation the fund scales with the
+ * contribution rate, and this reproduces every required rate the simulation
+ * found to within 0.7 percentage points.
+ */
+export function projectedReplacementRate(stratum, contributionRate) {
+  return (stratum.replacementRate * contributionRate) / 10;
+}
+
+/** The project the Selected work page leads with. */
+export const featuredProject = projects.find((project) => project.featured) || projects[0];
+
+/** Projects shown after the featured one. Empty today, populated by adding to the array above. */
+export const otherProjects = projects.filter((project) => project !== featuredProject);

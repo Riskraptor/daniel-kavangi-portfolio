@@ -65,6 +65,15 @@
   /* Errors were rendered in --color-accent, the same teal as links, so a
      failure read as a hyperlink. 5.75:1 on paper. */
   --color-danger: #b3261e;
+
+  /* Chart palette. Three distinct hues, each at least 5:1 on paper, paired with
+     distinct dash patterns so the series stay separable in greyscale. */
+  --chart-series-1: #1b4d5c;
+  --chart-series-2: #7b613d;
+  --chart-series-3: #6b2f4a;
+  --chart-surface: #fbf8f2;
+  --chart-grid: #d4cdc0;
+  --chart-axis: #8c816e;
 }
 
 @layer base {
@@ -850,4 +859,87 @@
   main {
     padding: 0 !important;
   }
+}
+
+.chart {
+  margin: 0;
+}
+
+.chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart-grid {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+
+.chart-axis {
+  stroke: var(--chart-axis);
+  stroke-width: 1;
+}
+
+.chart-tick {
+  fill: var(--color-ink-muted);
+  font-size: 13px;
+  font-family: var(--font-sans);
+}
+
+.chart-axis-label {
+  fill: var(--color-ink-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-family: var(--font-sans);
+}
+
+.chart-benchmark {
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+
+.chart-benchmark-label {
+  fill: var(--color-ink);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+}
+
+.chart-annotation {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+}
+
+.chart-cursor {
+  stroke: var(--color-ink);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.55;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.35rem;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--color-ink-soft);
+}
+
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chart-legend li.is-selected {
+  font-weight: 700;
+  color: var(--color-ink);
 }

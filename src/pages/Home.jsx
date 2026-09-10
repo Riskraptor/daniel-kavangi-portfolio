@@ -3,7 +3,7 @@ import PageWrapper from "../components/PageWrapper";
 import ResumeButton from "../components/ResumeButton";
 import SmartImage from "../components/SmartImage";
 import { IconArrow, IconPin } from "../components/Icons";
-import { education, experience, fitAreas, focusAreas, personalInfo, researchProject, toolkit } from "../data/portfolioData";
+import { education, experience, fitAreas, focusAreas, personalInfo, featuredProject, toolkit } from "../data/portfolioData";
 
 export default function Home() {
   const degree = education[0];
@@ -60,19 +60,19 @@ export default function Home() {
             <h2 className="mt-3 max-w-xl font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
               Evidence, not just keywords
             </h2>
-            <p className="mt-4 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft">{researchProject.summary}</p>
+            <p className="mt-4 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft">{featuredProject.summary}</p>
             <Link to="/work" className="btn btn-primary mt-7">
               Explore the research
               <IconArrow className="h-4 w-4" />
             </Link>
           </div>
           <article className="border border-rule bg-paper p-6 sm:p-8">
-            <p className="eyebrow">{researchProject.label}</p>
+            <p className="eyebrow">{featuredProject.label}</p>
             <h3 className="mt-3 font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl">
-              {researchProject.shortTitle}
+              {featuredProject.shortTitle}
             </h3>
             <div className="mt-7 grid grid-cols-2 divide-x divide-y divide-rule border border-rule sm:grid-cols-4 sm:divide-y-0">
-              {researchProject.scope.map((item) => (
+              {featuredProject.scope.map((item) => (
                 <div key={item.label} className="px-4 py-4">
                   <p className="font-serif text-2xl font-medium text-ink">{item.value}</p>
                   <p className="mt-1 text-xs uppercase tracking-wide text-ink-muted">{item.label}</p>
